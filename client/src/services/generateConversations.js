@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "localhost:3000/generateConversation"
+const url = "http://localhost:3000/generateConversation"
 
 export default {
     generateConversation(query){

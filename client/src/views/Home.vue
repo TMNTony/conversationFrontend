@@ -1,11 +1,12 @@
 <script setup>
-import HelloWorld from '../components/HelloWorld.vue'
+import Response from "../components/Response.vue";
 </script>
 
 <template>
   <div>
     Front End
   </div>
+  <Response/>
 
 </template>
 
