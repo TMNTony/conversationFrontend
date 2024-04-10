@@ -21,6 +21,7 @@
     <h2>Generated Conversation</h2>
     <p>{{ response }}</p>
   </div>
+  <Conversation v-if="questions.length > 0" :questions="questions" />
 
   <div v-if="error">
     <p>Error: {{ error }}</p>
@@ -29,8 +30,12 @@
 
 <script>
 import generateConversations from "../services/generateConversations.js";
+import Conversation from "./Conversation.vue";
 
 export default {
+  components: {
+    Conversation
+  },
   data() {
     return {
       name: "",
@@ -38,8 +43,8 @@ export default {
       language: "",
       interests: "",
       age: null,
-      query: "",
       response: "",
+      questions: [],
       error: null
     }
   },
@@ -56,7 +61,12 @@ export default {
       try {
         const res = await generateConversations.generateConversation(query);
         this.response = res.data.summary;
-        console.log(res)
+        this.questions = res.data.questions;
+        // this.questions.map(q => {
+        //   console.log(q.questionInTargetLanguage)
+        // })
+        console.log(this.questions)
+
       } catch (error) {
         console.error("Error generating conversation", error);
         this.error = "An error occurred while generating conversation.";
