@@ -18,10 +18,10 @@
     <button type="submit">Generate Conversation</button>
   </form>
   <div v-if="response">
-    <h2>Generated Conversation</h2>
+    <h2>Instructions</h2>
     <p>{{ response }}</p>
   </div>
-  <Conversation v-if="questions.length > 0" :questions="questions" />
+  <Conversation v-if="questions.length > 0" :questions="questions"/>
 
   <div v-if="error">
     <p>Error: {{ error }}</p>
@@ -62,10 +62,6 @@ export default {
         const res = await generateConversations.generateConversation(query);
         this.response = res.data.summary;
         this.questions = res.data.questions;
-        // this.questions.map(q => {
-        //   console.log(q.questionInTargetLanguage)
-        // })
-        console.log(this.questions)
 
       } catch (error) {
         console.error("Error generating conversation", error);

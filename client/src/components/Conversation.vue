@@ -1,12 +1,17 @@
 <template>
   <div>
-    <div>{{ this.dialogue }}</div>
-    <form v-if="currentQuestion < 9" @submit.prevent="submitResponse">
-      <label>{{this.questions.at(this.currentQuestion).questionInEnglish}}</label>
-      <input type="text" v-model="this.userResponse">
+    <h2>Conversation</h2>
+    <div v-html="dialogue"></div>
+    <form v-if="currentQuestion < questions.length" @submit.prevent="submitResponse">
+      <input type="text" v-model="userResponse">
       <button>Submit Response</button>
     </form>
-    <button v-if="currentQuestion > 8" @click="getAnalysis">Get Analysis</button>
+    <div v-if="showModal">
+      <h2>Feedback</h2>
+      <div v-html="analysisResults"></div>
+    </div>
+
+
   </div>
 
 </template>
@@ -25,22 +30,27 @@ export default {
     return {
       userResponse: "",
       currentQuestion: 0,
-      dialogue: this.questions.at(this.currentQuestion).questionInEnglish
+      dialogue: this.questions.at(0).questionInEnglish,
+      showModal: false,
+      analysisResults: ""
     }
   },
   methods: {
     async submitResponse() {
+      const nextQuestion = this.currentQuestion < this.questions.length - 1 ? this.questions[this.currentQuestion + 1] : "That was the final question"
 
       try {
         const response = {
-          previousQuestion: this.questions.at(this.currentQuestion),
+          previousQuestion: this.questions[this.currentQuestion],
           userResponse: this.userResponse,
-          nextQuestion: this.questions.at(this.currentQuestion + 1)
+          nextQuestion: nextQuestion
         }
 
         const res = await respondToUser.respond(response)
         this.currentQuestion += 1
-        this.dialogue = this.dialogue + res.data.questionInEnglish
+
+        this.dialogue += `<br>${this.userResponse}<br>${res.data.questionInEnglish}`;
+        await this.getAnalysis()
         this.userResponse = ""
 
       } catch (err) {
@@ -49,8 +59,16 @@ export default {
     },
     async getAnalysis() {
       try {
-        const res = await analyzeConversation.analyzeResponse(this.dialogue)
-        console.log(res)
+        const query = {
+          dialogue: {
+            questionInTargetLanguage: this.questions[this.currentQuestion].questionInTargetLanguage,
+            userResponse: this.userResponse
+          }
+        }
+        const res = await analyzeConversation.analyzeResponse(query)
+        this.analysisResults = res.data.analysis.replace(/\n/g, '<br>')
+        this.showModal = true
+
       } catch (err) {
         console.log(err)
       }
