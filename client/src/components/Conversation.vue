@@ -2,10 +2,13 @@
   <div>
     <h2>Conversation</h2>
     <div v-html="dialogue"></div>
-    <form v-if="currentQuestion < questions.length" @submit.prevent="submitResponse">
+    <Audio :question="currentQuestion" />
+    <form v-if="currentQuestionIndex < questions.length" @submit.prevent="submitResponse">
       <input type="text" v-model="userResponse">
       <button>Submit Response</button>
     </form>
+    <div>or</div>
+    <SendFile @updateResponse="userResponse = $event"/>
     <div v-if="showModal">
       <h2>Feedback</h2>
       <div v-html="analysisResults"></div>
@@ -19,39 +22,48 @@
 <script>
 import respondToUser from "../services/respondToUser.js";
 import analyzeConversation from "../services/analyzeConversation.js";
+import SendFile from "./SendFile.vue";
+import Audio from "./Audio.vue"
 
 export default {
 
   props: {
     questions: Array
   },
+  components : {
+    SendFile,
+    Audio
+  },
 
   data() {
     return {
       userResponse: "",
-      currentQuestion: 0,
+      currentQuestionIndex: 0,
+      currentQuestion: this.questions.at(this.currentQuestionIndex).questionInEnglish,
       dialogue: this.questions.at(0).questionInEnglish,
-      showModal: false,
-      analysisResults: ""
+      analysisResults: "",
+      showModal: false
     }
   },
   methods: {
     async submitResponse() {
-      const nextQuestion = this.currentQuestion < this.questions.length - 1 ? this.questions[this.currentQuestion + 1] : "That was the final question"
+      const nextQuestion = this.currentQuestionIndex < this.questions.length - 1 ? this.questions[this.currentQuestionIndex + 1] : "That was the final question"
 
       try {
         const response = {
-          previousQuestion: this.questions[this.currentQuestion],
+          previousQuestion: this.questions[this.currentQuestionIndex],
           userResponse: this.userResponse,
           nextQuestion: nextQuestion
         }
 
         const res = await respondToUser.respond(response)
-        this.currentQuestion += 1
+
 
         this.dialogue += `<br>${this.userResponse}<br>${res.data.questionInEnglish}`;
+        this.currentQuestion = res.data.questionInEnglish
         await this.getAnalysis()
         this.userResponse = ""
+        this.currentQuestionIndex += 1
 
       } catch (err) {
         console.log(err)
@@ -61,7 +73,7 @@ export default {
       try {
         const query = {
           dialogue: {
-            questionInTargetLanguage: this.questions[this.currentQuestion].questionInTargetLanguage,
+            questionInTargetLanguage: this.questions[this.currentQuestionIndex].questionInTargetLanguage,
             userResponse: this.userResponse
           }
         }

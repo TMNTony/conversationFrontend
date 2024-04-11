@@ -4,7 +4,7 @@ import Response from "../components/Response.vue";
 
 <template>
   <div>
-    Front End
+    Please enter your attributes
   </div>
   <Response/>
 

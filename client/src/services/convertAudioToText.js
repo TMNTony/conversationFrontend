@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "localhost:3000/convertAudioToText"
+const url = "http://localhost:3000/convertAudioToText"
 
 export default {
     convertAudioToText(file){
