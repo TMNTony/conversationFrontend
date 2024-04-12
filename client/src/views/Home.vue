@@ -1,11 +1,9 @@
 <script setup>
-import Response from "../components/Response.vue";
+import Response from "../components/Generator.vue";
 </script>
 
 <template>
-  <div>
-    Please enter your attributes
-  </div>
+  <h1>Conversation Partner Frontend</h1>
   <Response/>
 
 </template>

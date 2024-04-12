@@ -7,11 +7,11 @@
       <input type="text" v-model="userResponse">
       <button>Submit Response</button>
     </form>
-    <div>or</div>
+    <div class="or">or</div>
     <SendFile @updateResponse="userResponse = $event"/>
     <div v-if="showModal">
       <h2>Feedback</h2>
-      <div v-html="analysisResults"></div>
+      <div class="feedback" v-html="analysisResults"></div>
     </div>
 
 
@@ -92,5 +92,79 @@ export default {
 </script>
 
 <style scoped>
+div {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background-color: #f4f4f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+}
 
+h2 {
+  color: #333;
+  text-align: center;
+}
+
+input[type="text"] {
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  color: white;
+  background-color: #007BFF;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+div[role="alert"] {
+  color: #D8000C;
+  background-color: #FFD2D2;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+form {
+  margin-bottom: 20px;
+}
+
+div.or {
+  text-align: center;
+  margin: 20px 0;
+}
+
+audio {
+  width: 100%;
+  margin-top: 20px;
+}
+
+div.feedback {
+  margin-top: 20px;
+  background-color: #e9ecef;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+div.v-html {
+  padding: 15px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
 </style>

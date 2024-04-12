@@ -1,5 +1,8 @@
 <template>
-  <form @submit.prevent="submitQuery">
+  <div>
+    Please enter your attributes
+  </div>
+  <form v-if="questions.length === 0" @submit.prevent="submitQuery">
     <label for="name">Name</label>
     <input type="text" id="name" v-model="name" required>
 
@@ -74,5 +77,58 @@ export default {
 </script>
 
 <style scoped>
+form {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
+label {
+  display: block;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+input[type="text"],
+input[type="number"],
+button {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+button {
+  background-color: #5c67f2;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #4a54e1;
+}
+
+h2 {
+  color: #333;
+}
+
+div.response {
+  background-color: #e3e3e3;
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+div.error {
+  color: #ff6b6b;
+}
 </style>
