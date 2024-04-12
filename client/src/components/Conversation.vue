@@ -39,8 +39,8 @@ export default {
     return {
       userResponse: "",
       currentQuestionIndex: 0,
-      currentQuestion: this.questions.at(this.currentQuestionIndex).questionInEnglish,
-      dialogue: this.questions.at(0).questionInEnglish,
+      currentQuestion: this.questions.at(this.currentQuestionIndex).questionInTargetLanguage,
+      dialogue: this.questions.at(0).questionInTargetLanguage,
       analysisResults: "",
       showModal: false
     }
@@ -59,8 +59,8 @@ export default {
         const res = await respondToUser.respond(response)
 
 
-        this.dialogue += `<br>${this.userResponse}<br>${res.data.questionInEnglish}`;
-        this.currentQuestion = res.data.questionInEnglish
+        this.dialogue += `<br>${this.userResponse}<br>${res.data.questionInTargetLanguage}`;
+        this.currentQuestion = res.data.questionInTargetLanguage
         await this.getAnalysis()
         this.userResponse = ""
         this.currentQuestionIndex += 1
